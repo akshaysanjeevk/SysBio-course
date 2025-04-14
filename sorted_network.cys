@@ -1,0 +1,22 @@
+{
+    "network": {
+        "data": {
+            "name": "Sorted Network"
+        },
+        "elements": {
+            "nodes": [],
+            "edges": []
+        }
+    },
+    "visualization": {
+        "defaultNodeColor": "#ffffff",
+        "defaultEdgeColor": "#000000"
+    },
+    "networkAttributes": {
+        "name": "Sorted Network"
+    },
+    "style": {
+        "defaultNodeShape": "ellipse",
+        "defaultEdgeWidth": 2
+    }
+}
