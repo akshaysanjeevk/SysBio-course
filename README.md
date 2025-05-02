@@ -1,4 +1,6 @@
-# SysBio-course
+# Systems Biology Course:
+
+This repository contains the homework submissions for Systems Biology course taught by Areejit Samal and Sandeep Choubey from Jan 2025-. 
 
 ## Assignment-1
 Answers are in hw1-RegDB.ipynb
@@ -12,3 +14,7 @@ Answers are in hw1-RegDB.ipynb
 
 5. Visualize the hierarchical decomposition of the TRN in Cytoscape.
 
+
+## Assignment-2
+
+Reproduce the figures from Mangan et al(2003). 
