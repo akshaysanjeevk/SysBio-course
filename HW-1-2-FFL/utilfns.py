@@ -42,8 +42,9 @@ def subplotGenr(prm, Q0, axis, show_pulse=True,):
     def ODEsystem(Q, t):
         y, z = Q
         xStar2 = np.interp(t, t_grid, xStar)
+        yStar2 = np.interp(t, t_grid, yStar)
         ydot = prm['By'] + prm['Cy'] * hill(xStar2, prm['Kxy'], prm['H'], prm['regXY']) - prm['Ay'] * y
-        zdot = prm['Bz'] + prm['Cz'] * Gate(xStar2, prm['Kxz'], prm['regXZ'], y,prm['Kyz'], prm['regYZ'], prm) - prm['Az'] * z
+        zdot = prm['Bz'] + prm['Cz'] * Gate(xStar2, prm['Kxz'], prm['regXZ'], yStar2,prm['Kyz'], prm['regYZ'], prm) - prm['Az'] * z
         return [ydot, zdot]
 
     Qsol = odeint(ODEsystem, Q0, t_grid)

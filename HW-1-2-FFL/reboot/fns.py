@@ -29,7 +29,7 @@ def pulse(t, start, width):
     return 1.0 if (start <= t <= start + width) else 0.0
 
 def impulse(Si, i):
-    return i if (Si==1) else 0.0
+    return i if (Si==1) else 0.0 
 def sys(t, Q, prm):
     y, z = Q
     Sy = pulse(t, prm['ystart'], prm['ywidth'])
