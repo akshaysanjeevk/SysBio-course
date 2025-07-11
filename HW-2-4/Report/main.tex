@@ -4,14 +4,14 @@
 \usepackage{hyperref}
 \usepackage{geometry}
 \usepackage{amsmath}
-\title{An Analysis on Public Health Data of Chronic Kidney Disease}
+\title{An Analysis on Chronic Kidney Disease Public Health Data}
 \author{Akshay Sanjeev}
 \date{\today}
 
 \begin{document}
 \maketitle
 
-\section{Preface}
+\section*{Preface}
 \subsection{Notation and Convention}
 By standard dataset, from now on I will be referring to the following data structure. 
 We have $m$ independent variables(a.k.a features), denoted by $x^i, i = 1,2,3, \cdots,m$ 
@@ -25,6 +25,50 @@ and the lower index denotes the observation. Thus the dataset is set like the on
         x^1_n & x^2_n & \cdots & x^m_n & y_n
     \end{pmatrix}
 \end{equation}
+
+\subsection{Model Evaluation}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+ & \textbf{Predicted Positive} & \textbf{Predicted Negative} \\
+\hline
+\textbf{Actual Positive} & $TP$ (True Positive) & $FN$ (False Negative) \\
+\hline
+\textbf{Actual Negative} & $FP$ (False Positive) & $TN$ (True Negative) \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection*{Accuracy}
+Accuracy is the proportion of all predictions (both positive and negative) that were correct. It is not recommended when dealing with imbalanced datasets.
+\[
+\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+\]
+
+\subsubsection*{Recall(TPR)}
+Also known as the true positive rate or sensitivity, recall measures the proportion of actual positive cases that were correctly identified.
+\[
+\text{Recall} = \frac{TP}{TP + FN}
+\]
+
+\subsubsection*{False Positive Rate (FPR)}
+The false positive rate measures the proportion of actual negatives that were incorrectly classified as positive. Ideally, this should be close to zero.
+\[
+\text{FPR} = \frac{FP}{FP + TN}
+\]
+
+\subsubsection*{Precision}
+Precision is the proportion of predicted positive cases that are truly positive.
+\[
+\text{Precision} = \frac{TP}{TP + FP}
+\]
+
+\subsubsection{ROC curve}
+ROC curve is plotted as true positive rate(TPR) on $y$ axis and false positive rate(FPR) on $x$ axis. Ideally
+we want TPR to be 1 and FPR to be 0. Hence the closer it follows the left and upper axis, better
+the results. Another related measure is the area under the ROC curve. The best result would be AuC = 1. 
+
 
 
 
@@ -77,7 +121,8 @@ person having chronic kidney disease or not.
     \centering
     \includegraphics[scale=.7]{targetvar_correlation.pdf}
     \label{fig:4varcorr}
-    \caption{}
+    \caption{Each subplot is trying to visualise relation between target variable, \texttt{ckd\_code\_sample\_1}
+    with other 3 variables related to chronic Kidney disease. }
 \end{figure}
 I tried to find a correlation between the numeric CKD feature and other features in pursuit of picking 
 a target variable among the four. The plots are in figure \ref{fig:4varcorr}. Qualitatively, \texttt{ckd\_\_probable\_sample\_1} has the highest correlation. But 
@@ -86,51 +131,6 @@ I think it's okay to remove all four from training data to be safe. For the targ
 3 stages of chronic Kidney disease.\par 
 Now that the question is clear, we will use Decision Trees, Random Forest and Feed-froward Neural Network models 
 on the data. 
-
-
-\section{Model Evaluation}
-
-\begin{center}
-\begin{tabular}{|c|c|c|}
-\hline
- & \textbf{Predicted Positive} & \textbf{Predicted Negative} \\
-\hline
-\textbf{Actual Positive} & $TP$ (True Positive) & $FN$ (False Negative) \\
-\hline
-\textbf{Actual Negative} & $FP$ (False Positive) & $TN$ (True Negative) \\
-\hline
-\end{tabular}
-\end{center}
-
-\subsubsection*{Accuracy}
-Accuracy is the proportion of all predictions (both positive and negative) that were correct. It is not recommended when dealing with imbalanced datasets.
-\[
-\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
-\]
-
-\subsubsection*{Recall}
-Also known as the true positive rate or sensitivity, recall measures the proportion of actual positive cases that were correctly identified.
-\[
-\text{Recall} = \frac{TP}{TP + FN}
-\]
-
-\subsubsection*{False Positive Rate (FPR)}
-The false positive rate measures the proportion of actual negatives that were incorrectly classified as positive. Ideally, this should be close to zero.
-\[
-\text{FPR} = \frac{FP}{FP + TN}
-\]
-
-\subsubsection*{Precision}
-Precision is the proportion of predicted positive cases that are truly positive.
-\[
-\text{Precision} = \frac{TP}{TP + FP}
-\]
-
-\subsubsection*{F1 Score}
-The F1 score is the harmonic mean of precision and recall, offering a balanced measure between them.
-\[
-F1 = 2 \cdot \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
-\]
 
 
 \section{Decision Tree}
@@ -216,18 +216,25 @@ at first I was interested in is how would the algorithm perform as you increase 
 the accuracy of random forest, with 1 to 600 trees(figure \ref{fig:treeacc}). The accuracy of classification saturates
 for both training and validation dataset a little early than 100 trees. Thus I picked 100 trees and did the classification. 
 
-The summary of a result with confusion matrix and feature importance are plotted in \ref{rfsum}. As we have seen for 
+The summary of a result with confusion matrix and feature importance are plotted in \ref{fig:rfsum}. As we have seen for 
 Decision tree, class 0 and 1 are fairly good. Now class 2 also doesn't have any observations in testing data. We can see 
 a much wider feature importance here. Interestingly the highest contributing feature earlier is shifted to third place. 
 The importance of leading features have also lowered, implying a more balanced classification.  
 
-\begin{figure}
-    \includegraphics[scale=.5]{RF_summary.pdf}
-    \label{rfsum}
-    \caption{(Left) Confusion matrix of Random Forest classification. Precisions values are 
-    0.97, 0.95 and 0 for class 0, 1 and 2 respectively. Accuracy is 0.97, (Right) The 10 highest contributing features
+\begin{figure}\centering
+    \includegraphics[scale=.75]{RF_summary.pdf}
+    \label{fig:rfsum}
+    \caption{(Top, Left) Confusion matrix of Random Forest classification. Precisions values are 
+    0.97, 0.95 and 0 for class 0, 1 and 2 respectively. Accuracy is 0.97, (Top, Right) ROC curve for different
+    classes. (Bottom) The 10 highest contributing features
     to the model.}
 \end{figure}
+From the ROC curve in the figure \ref{fig:rfsum} also implies a fair classification for 
+class 0 and 1. Eventhough no class 2 observations were predicted correctly, class 2 having 
+a high area under the ROC curve(0.9284) is hard to understand. 
+
+To recapitulate, switching from decision tree to random forest, had given us marginal increase
+in accuracy. But I think the ensemble effect can be seen when we have large data to test the model on. 
 
 
 \section{Feed-forward Neural Network(FFNL)}
@@ -260,6 +267,31 @@ The cost gradient is estimated using chain rule. For the weight matrix, it can b
 \end{align}
 You iteratively do this until you reach the minimum cost possible.The prediction part where you move from input to output is called forward propagation 
 and the parameter tuning part is called back propagation. 
+
+\subsection{Analysis \& Results}
+Using \href{https://www.tensorflow.org/api_docs/python/tf/all_symbols}{ TensorFlow 2} in Pyhton 3.11. At first, I 
+built an FFNL with 1 input layer with 46 input layers(same as the number of features),
+one hidden layer with 32 neurons and the output layer with 4 neurons, because I have 
+4 class labels. For the first two layers, I have a sigmoid activation function and
+for the final layer I have softmax. I am training the network for 50 epochs. I have 
+tried longer epochs, but the accuracy is saturated around 0.8, whihc doesn't look that bad.
+But the classification matrix had the real horror. In figure \label{fig:ffnlsums}
+you can see that everything was predicted as class 0 and since all class 0,  which 
+dominated the training dataset, has been classified correctly the resulting accuracy
+was 0.81. 
+I made a bigger network,  with (45, 128, 64, 32, 4) and still the same. I varied the 
+learning rate, $\epsilon$ and nothing changed. An interesting observation was the 
+network is not learning. The \texttt{loss, va\_accuracy} and \texttt{val\_loss} are not 
+changing at all and \texttt{accuracy} is fluctuating around 0.8. 
+\begin{figure}
+    \centering
+    \includegraphics[scale=.5]{FFNL_summary.pdf}
+    \caption{Confusion matrix for Feed-forward Neural Network. Precision of
+    class 0, 1 and 2 are 0.81, 0 and 0 respectively. }
+    \label{fig:ffnlsum}
+\end{figure}
+
+To conclude, I couldn't optimise the Feedforward neural network model for this problem. 
 
 
 \end{document}
